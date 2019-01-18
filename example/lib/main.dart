@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:token_core_plugin/model/ex_identity.dart';
-import 'package:token_core_plugin/model/ex_wallet.dart';
-import 'package:token_core_plugin/token_core_plugin.dart';
+import 'package:token_core_plugin_example/demos/btc.dart';
+import 'package:token_core_plugin_example/demos/eth.dart';
 import 'package:token_core_plugin_example/demos/identity.dart';
 
 void main() => runApp(MyApp());
@@ -22,7 +18,9 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   List<TabItem> tabs = [
     TabItem('Identity Test', IdentityDemo()),
-    TabItem('BTC Test',Container(color: Colors.teal,))
+    TabItem('BTC Test',BTCDemo()),
+    TabItem('USDT Test',Container(color: Colors.yellow,)),
+    TabItem('ETH Test',ETHDemo()),
   ];
 
   @override

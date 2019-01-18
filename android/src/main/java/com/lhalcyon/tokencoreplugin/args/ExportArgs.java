@@ -1,6 +1,6 @@
 package com.lhalcyon.tokencoreplugin.args;
 
-public class ExportMnemonicArgs implements ArgsValid {
+public class ExportArgs implements ArgsValid {
 
     public String keystore;
 

@@ -31,8 +31,7 @@ public class CreateIdentityArgs implements ArgsValid{
     }
 
     public com.lhalcyon.tokencore.wallet.bip.Words getWords(){
-        //todo update dependency then add valueOf() to method
-        return com.lhalcyon.tokencore.wallet.bip.Words.TWELVE;
+        return com.lhalcyon.tokencore.wallet.bip.Words.valueOf(words);
     }
 
     @Override

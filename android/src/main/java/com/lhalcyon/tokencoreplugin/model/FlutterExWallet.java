@@ -1,4 +1,4 @@
-package com.lhalcyon.tokencoreplugin.result;
+package com.lhalcyon.tokencoreplugin.model;
 
 public class FlutterExWallet {
 

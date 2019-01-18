@@ -12,5 +12,12 @@ public interface CallMethod {
 
     String exportPrivateKey = "exportPrivateKey";
 
+    String importPrivateKey = "importPrivateKey";
+
+    String signBitcoinTransaction = "signBitcoinTransaction";
+
+
+
+
 
 }

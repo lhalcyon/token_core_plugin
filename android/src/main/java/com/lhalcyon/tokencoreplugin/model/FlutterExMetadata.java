@@ -1,4 +1,4 @@
-package com.lhalcyon.tokencoreplugin.result;
+package com.lhalcyon.tokencoreplugin.model;
 
 import com.lhalcyon.tokencore.wallet.ex.ChainType;
 import com.lhalcyon.tokencore.wallet.ex.ExMetadata;

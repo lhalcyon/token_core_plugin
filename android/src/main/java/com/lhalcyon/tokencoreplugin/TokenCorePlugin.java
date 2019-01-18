@@ -4,18 +4,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.lhalcyon.tokencore.foundation.utils.MnemonicUtil;
 import com.lhalcyon.tokencore.wallet.bip.Words;
+import com.lhalcyon.tokencore.wallet.ex.ChainType;
 import com.lhalcyon.tokencore.wallet.ex.ExIdentity;
 import com.lhalcyon.tokencore.wallet.ex.ExMetadata;
 import com.lhalcyon.tokencore.wallet.ex.ExWallet;
+import com.lhalcyon.tokencore.wallet.ex.Network;
+import com.lhalcyon.tokencore.wallet.ex.SegWit;
+import com.lhalcyon.tokencore.wallet.ex.WalletFrom;
+import com.lhalcyon.tokencore.wallet.ex.WalletType;
 import com.lhalcyon.tokencore.wallet.keystore.ExIdentityKeystore;
 import com.lhalcyon.tokencore.wallet.keystore.ExKeystore;
+import com.lhalcyon.tokencore.wallet.keystore.V3Keystore;
+import com.lhalcyon.tokencore.wallet.transaction.BitcoinTransaction;
 import com.lhalcyon.tokencoreplugin.args.ArgsValid;
 import com.lhalcyon.tokencoreplugin.args.CreateIdentityArgs;
-import com.lhalcyon.tokencoreplugin.args.ExportMnemonicArgs;
+import com.lhalcyon.tokencoreplugin.args.ExportArgs;
+import com.lhalcyon.tokencoreplugin.args.ImportPrivateKeyArgs;
 import com.lhalcyon.tokencoreplugin.args.RecoverIdentityArgs;
-import com.lhalcyon.tokencoreplugin.result.FlutterExIdentity;
-import com.lhalcyon.tokencoreplugin.result.FlutterExMetadata;
-import com.lhalcyon.tokencoreplugin.result.FlutterExWallet;
+import com.lhalcyon.tokencoreplugin.args.SignBTCArgs;
+import com.lhalcyon.tokencoreplugin.model.FlutterExIdentity;
+import com.lhalcyon.tokencoreplugin.model.FlutterExMetadata;
+import com.lhalcyon.tokencoreplugin.model.FlutterExWallet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,10 +74,63 @@ public class TokenCorePlugin implements MethodCallHandler {
             case CallMethod.exportPrivateKey:
                 onExportPrivateKey(call,result);
                 break;
+            case CallMethod.importPrivateKey:
+                onImportPrivateKey(call,result);
+                break;
+            case CallMethod.signBitcoinTransaction:
+                onSignBitcoinTransaction(call,result);
+                break;
             default:
                 result.notImplemented();
                 break;
         }
+    }
+
+    private void onSignBitcoinTransaction(MethodCall call, Result result) {
+        if (isArgumentLegal(call,result)){
+            return;
+        }
+        Object arguments = call.arguments;
+        String json = gson.toJson(arguments);
+        SignBTCArgs args = gson.fromJson(json,SignBTCArgs.class);
+
+
+
+        BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(args.toAddress,args.changeIndex,args.amount,args.fee,args.getUTXO(gson));
+
+
+    }
+
+    private void onImportPrivateKey(MethodCall call, Result result) {
+        if (isArgumentLegal(call,result)){
+            return;
+        }
+        Object arguments = call.arguments;
+        String json = gson.toJson(arguments);
+        ImportPrivateKeyArgs args = gson.fromJson(json,ImportPrivateKeyArgs.class);
+
+        if (isArgumentValid(args, call, result)){
+            return;
+        }
+
+        ExMetadata exMetadata = new ExMetadata();
+
+        boolean isBtcImport = ChainType.BITCOIN.getValue().equals(args.chainType);
+        exMetadata.setFrom(isBtcImport?WalletFrom.WIF:WalletFrom.PRIAVTE_KEY);
+
+        exMetadata.setChainType(ChainType.valueOf(args.chainType));
+        exMetadata.setNetwork(Network.valueOf(args.network));
+        exMetadata.setSegWit(SegWit.valueOf(args.segwit));
+        exMetadata.setWalletType(WalletType.V3);
+
+        V3Keystore keystore = new V3Keystore(exMetadata,args.password,args.privateKey,"");
+        ExWallet exWallet = new ExWallet(keystore);
+
+        FlutterExMetadata meta = new FlutterExMetadata(exMetadata);
+        FlutterExWallet wallet = new FlutterExWallet(meta,keystore.toJsonString(),exWallet.getAddress());
+        String s = gson.toJson(wallet);
+        result.success(s);
+
     }
 
     private void onExportPrivateKey(MethodCall call, Result result) {
@@ -77,7 +139,7 @@ public class TokenCorePlugin implements MethodCallHandler {
         }
         Object arguments = call.arguments;
         String json = gson.toJson(arguments);
-        ExportMnemonicArgs args = gson.fromJson(json,ExportMnemonicArgs.class);
+        ExportArgs args = gson.fromJson(json,ExportArgs.class);
 
         ObjectMapper mapper = new ObjectMapper();
         ExKeystore keystore;
@@ -107,7 +169,7 @@ public class TokenCorePlugin implements MethodCallHandler {
         }
         Object arguments = call.arguments;
         String json = gson.toJson(arguments);
-        ExportMnemonicArgs args = gson.fromJson(json,ExportMnemonicArgs.class);
+        ExportArgs args = gson.fromJson(json,ExportArgs.class);
 
         ObjectMapper mapper = new ObjectMapper();
         ExIdentityKeystore keystore = null;

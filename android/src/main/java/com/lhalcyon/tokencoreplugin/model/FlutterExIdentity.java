@@ -1,4 +1,4 @@
-package com.lhalcyon.tokencoreplugin.result;
+package com.lhalcyon.tokencoreplugin.model;
 
 import java.util.ArrayList;
 import java.util.List;

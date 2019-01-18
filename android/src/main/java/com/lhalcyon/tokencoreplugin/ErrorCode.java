@@ -9,4 +9,6 @@ public interface ErrorCode {
     String MNEMONIC_ERROR = "10002";
 
     String PASSWORD_ERROR = "10003";
+
+    String PRIVATE_KEY_ERROR = "10004";
 }

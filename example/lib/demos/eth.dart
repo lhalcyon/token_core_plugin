@@ -7,18 +7,19 @@ import 'package:token_core_plugin/token_core_plugin.dart';
 import 'package:token_core_plugin_example/item.dart';
 import 'package:flutter/services.dart';
 
-class BTCDemo extends StatelessWidget {
+class ETHDemo extends StatelessWidget {
 
   final List<Item> listData = List();
 
   void initList() {
     listData.clear();
-    listData.add(Item('mnemonic create test'));
-    listData.add(Item('mnemonic import test'));
-    listData.add(Item('mnemonic export test'));
-    listData.add(Item('private key import test'));
+    listData.add(Item('mnemonic create'));
+    listData.add(Item('mnemonic import'));
+    listData.add(Item('mnemonic export'));
+    listData.add(Item('private key import '));
     listData.add(Item('private key export'));
-    listData.add(Item('transaction test'));
+    listData.add(Item('keystore import '));
+    listData.add(Item('keystore import '));
   }
 
   Future onItemTapped(int index) async {
@@ -72,21 +73,6 @@ class BTCDemo extends StatelessWidget {
         }
         break;
       case 4:
-        try {
-          ExIdentity identity = await TokenCorePlugin.recoverIdentity(
-              password,
-              Network.testNet,
-              SegWit.none,
-              "reward left manage decorate joke milk tomorrow spoil wrist regular disease correct");
-          var keystore = identity.keystore;
-          var mnemonic =
-          await TokenCorePlugin.exportMnemonic(keystore, password);
-          print(mnemonic);
-        } on PlatformException catch (e) {
-          print(e.toString());
-        }
-        break;
-      case 5:
         try {
           ExIdentity identity = await TokenCorePlugin.recoverIdentity(
               password,

@@ -9,14 +9,14 @@ import 'package:flutter/services.dart';
 
 class IdentityDemo extends StatelessWidget {
 
-  List<Item> listData = List();
+  final List<Item> listData = List();
 
   void initList() {
     listData.clear();
-    listData.add(Item('random mnemonic test', onItemTapped(0)));
-    listData.add(Item('create identity test', onItemTapped(1)));
-    listData.add(Item('recover identity test',onItemTapped(2)));
-    listData.add(Item('identity export mnemonic test', onItemTapped(3)));
+    listData.add(Item('random mnemonic test'));
+    listData.add(Item('create identity test'));
+    listData.add(Item('recover identity test'));
+    listData.add(Item('export mnemonic test'));
   }
 
   Future onItemTapped(int index) async {
@@ -66,21 +66,6 @@ class IdentityDemo extends StatelessWidget {
           print(e.toString());
         }
         break;
-      case 4:
-        try {
-          ExIdentity identity = await TokenCorePlugin.recoverIdentity(
-              password,
-              Network.testNet,
-              SegWit.none,
-              "reward left manage decorate joke milk tomorrow spoil wrist regular disease correct");
-          var wallet = identity.getBitcoinWallet();
-          String privateKey =
-          await TokenCorePlugin.exportPrivateKey(wallet.keystore, password);
-          print(privateKey);
-        } on PlatformException catch (e) {
-          print(e.toString());
-        }
-        break;
       default:
         break;
     }
@@ -92,8 +77,10 @@ class IdentityDemo extends StatelessWidget {
     initList();
     return new ListView.builder(itemCount:listData.length,itemBuilder: (BuildContext context, int index){
       var data = listData[index];
-      return new ListTile(title: new Text(data.title),onTap: (){
-        data.onTap;
+      return new ListTile(title: new Text(data.title),onTap: ()  {
+        print('--------------- '+data.title +'start ---------------');
+        onItemTapped(index);
+        print('end');
       },);
     });
   }
