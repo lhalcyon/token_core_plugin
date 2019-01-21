@@ -2,13 +2,19 @@ package com.lhalcyon.tokencoreplugin;
 
 public interface ErrorCode {
 
+    String ERROR = "9999";
+
     String CALL_ERROR = "10000";
 
     String ARGS_ERROR = "10001";
 
     String MNEMONIC_ERROR = "10002";
 
-    String PASSWORD_ERROR = "10003";
+    String IMPORT_ERROR = "10003";
 
-    String PRIVATE_KEY_ERROR = "10004";
+    String EXPORT_ERROR = "10005";
+
+    String KEYSTORE_ERROR = "10006";
+
+    String SIGN_ERROR = "10007";
 }

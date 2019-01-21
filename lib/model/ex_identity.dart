@@ -1,6 +1,9 @@
 import 'package:token_core_plugin/model/ex_wallet.dart';
 
 class ExIdentity {
+
+  ExMetadata metadata;
+
   List<ExWallet> wallets = List();
 
   String keystore;
@@ -21,6 +24,7 @@ class ExIdentity {
 
   ExIdentity.fromMap(Map<String, dynamic> map) {
     keystore = map['keystore'];
+    metadata = ExMetadata.fromMap(map['metadata']);
 
     var rawWallets = map['wallets'];
     if (rawWallets == null || rawWallets.length == 0) {
@@ -31,10 +35,10 @@ class ExIdentity {
       var walletMap = rawWallets[i];
       var wallet = ExWallet.fromMap(walletMap);
 
-      var metadataMap = walletMap['metadata'];
-      var metadata = ExMetadata.fromMap(metadataMap);
+//      var metadataMap = walletMap['metadata'];
+//      var metadata = ExMetadata.fromMap(metadataMap);
+//      wallet.metadata = metadata;
 
-      wallet.metadata = metadata;
       wallets.add(wallet);
     }
   }

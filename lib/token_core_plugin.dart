@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:token_core_plugin/model/ex_identity.dart';
 import 'package:token_core_plugin/model/ex_wallet.dart';
+import 'package:token_core_plugin/model/sign_result.dart';
 import 'package:token_core_plugin/model/utxo.dart';
 
 class TokenCorePlugin {
@@ -17,7 +18,7 @@ class TokenCorePlugin {
       'segwit': segwit,
       'words': words,
     });
-    print('result:\n' + identityJson);
+    print(identityJson);
     Map<String, dynamic> map = json.decode(identityJson);
     var identity = ExIdentity.fromMap(map);
     return identity;
@@ -73,10 +74,15 @@ class TokenCorePlugin {
     });
     Map<String, dynamic> map = json.decode(walletJson);
     var wallet = ExWallet.fromMap(map);
+
+//    var metadataMap = map['metadata'];
+//    var metadata = ExMetadata.fromMap(metadataMap);
+//    wallet.metadata = metadata;
+
     return wallet;
   }
 
-  static Future<String> signBitcoinTransaction(
+  static Future<SignResult> signBitcoinTransaction(
       String toAddress,
       int amount,
       int fee,
@@ -85,17 +91,22 @@ class TokenCorePlugin {
       int changeIndex,
       String password,
       String usdtHex) async {
-    String utxoListStr = jsonEncode(utxo);
+    UTXOStore store = UTXOStore();
+    store.utxos = utxo;
+    String utxoListStr = jsonEncode(store.toList());
 
-    final String hash = await _channel.invokeMethod('signBitcoinTransaction', {
+    final String signResultJson = await _channel.invokeMethod('signBitcoinTransaction', {
       'toAddress': toAddress,
       'fee': fee,
       'utxo': utxoListStr,
       'keystore': wallet.keystore,
       'changeIndex': changeIndex,
       'password': password,
-      'usdtHex': usdtHex
+      'usdtHex': usdtHex,
+      'amount':amount
     });
-    return hash;
+    Map<String, dynamic> map = json.decode(signResultJson);
+    var signResult = SignResult.fromMap(map);
+    return signResult;
   }
 }

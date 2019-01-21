@@ -106,7 +106,8 @@ class ExWallet {
   ExWallet.fromMap(Map<String, dynamic> map)
       :
         keystore = map['keystore'],
-        address = map['address']
+        address = map['address'],
+        metadata = ExMetadata.fromMap(map['metadata'])
   ;
 
   Map<String, dynamic> toMap() =>

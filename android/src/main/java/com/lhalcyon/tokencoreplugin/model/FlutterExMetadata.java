@@ -17,7 +17,7 @@ public class FlutterExMetadata {
 
     public int walletType;
 
-    public String ChainType;
+    public String chainType;
 
     public FlutterExMetadata(ExMetadata metadata) {
         Network network = metadata.getNetwork();
@@ -27,7 +27,7 @@ public class FlutterExMetadata {
         WalletFrom from = metadata.getFrom();
 
         this.network = network == null ? this.network : network.getValue();
-        this.ChainType = chainType == null ? this.ChainType : chainType.getValue();
+        this.chainType = chainType == null ? this.chainType : chainType.getValue();
         this.segWit = segWit == null ? this.segWit : segWit.getValue();
         this.walletFrom = from == null ? this.walletFrom : from.getValue();
         this.walletType = walletType == null ? this.walletType : walletType.getValue();
