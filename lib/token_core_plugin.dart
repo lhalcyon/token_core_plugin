@@ -95,7 +95,8 @@ class TokenCorePlugin {
     store.utxos = utxo;
     String utxoListStr = jsonEncode(store.toList());
 
-    final String signResultJson = await _channel.invokeMethod('signBitcoinTransaction', {
+    final String signResultJson =
+        await _channel.invokeMethod('signBitcoinTransaction', {
       'toAddress': toAddress,
       'fee': fee,
       'utxo': utxoListStr,
@@ -103,7 +104,7 @@ class TokenCorePlugin {
       'changeIndex': changeIndex,
       'password': password,
       'usdtHex': usdtHex,
-      'amount':amount
+      'amount': amount
     });
     Map<String, dynamic> map = json.decode(signResultJson);
     var signResult = SignResult.fromMap(map);

@@ -17,6 +17,7 @@ class BTCDemo extends StatelessWidget {
     listData.add(Item('private key import test'));
     listData.add(Item('private key export test'));
     listData.add(Item('transaction test'));
+    listData.add(Item('verify password test'));
   }
 
   Future onItemTapped(int index) async {
@@ -120,6 +121,23 @@ class BTCDemo extends StatelessWidget {
           var signResult = await TokenCorePlugin.signBitcoinTransaction(
               to, amount, fee, utxo, bitcoinWallet, 0, password, null);
           print(signResult);
+        } on PlatformException catch (e) {
+          print(e.toString());
+        }
+        break;
+      case 6:
+        try {
+          ExIdentity identity = await TokenCorePlugin.recoverIdentity(
+              password,
+              Network.testNet,
+              SegWit.none,
+              "reward left manage decorate joke milk tomorrow spoil wrist regular disease correct");
+          var keystore = identity.keystore;
+          var isCorrect = TokenCorePlugin.verifyPassword(keystore, password);
+          print("isCorrect:$isCorrect");
+          isCorrect.then((b){
+            print('then:$b');
+          });
         } on PlatformException catch (e) {
           print(e.toString());
         }

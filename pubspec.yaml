@@ -1,8 +1,8 @@
 name: token_core_plugin
-description: A new flutter plugin project.
+description: A flutter plugin project for token.
 version: 0.0.1
-author:
-homepage:
+author: L <lh_halcyondays@163.com>
+homepage: https://lhalcyon.com
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"

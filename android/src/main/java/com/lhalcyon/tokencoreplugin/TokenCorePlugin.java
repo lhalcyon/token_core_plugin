@@ -23,6 +23,7 @@ import com.lhalcyon.tokencoreplugin.args.ExportArgs;
 import com.lhalcyon.tokencoreplugin.args.ImportPrivateKeyArgs;
 import com.lhalcyon.tokencoreplugin.args.RecoverIdentityArgs;
 import com.lhalcyon.tokencoreplugin.args.SignBTCArgs;
+import com.lhalcyon.tokencoreplugin.args.VerifyArgs;
 import com.lhalcyon.tokencoreplugin.model.FlutterExIdentity;
 import com.lhalcyon.tokencoreplugin.model.FlutterExMetadata;
 import com.lhalcyon.tokencoreplugin.model.FlutterExWallet;
@@ -46,6 +47,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class TokenCorePlugin implements MethodCallHandler {
 
     private ObjectMapper objectMapper = new ObjectMapper();
+
     /**
      * Plugin registration.
      */
@@ -82,15 +84,41 @@ public class TokenCorePlugin implements MethodCallHandler {
             case CallMethod.signBitcoinTransaction:
                 onSignBitcoinTransaction(call, result);
                 break;
+            case CallMethod.verifyPassword:
+                onVerifyPassword(call, result);
+                break;
             default:
                 result.notImplemented();
                 break;
         }
     }
 
+    private void onVerifyPassword(MethodCall call, Result result) {
+        try {
+            if (isArgumentIllegal(call, result)) {
+                return;
+            }
+            Object arguments = call.arguments;
+            String json = objectMapper.writeValueAsString(arguments);
+            VerifyArgs args = objectMapper.readValue(json, VerifyArgs.class);
+            boolean isCorrect = false;
+            if (KeystoreUtil.isIdentityKeystore(args.keystore)) {
+                ExIdentityKeystore identityKeystore = objectMapper.readValue(args.keystore, ExIdentityKeystore.class);
+                isCorrect = identityKeystore.verifyPassword(args.password);
+            } else {
+                ExWallet wallet = mapKeystore2Wallet(args.keystore, args.password);
+                isCorrect = wallet.getKeystore().verifyPassword(args.password);
+            }
+            result.success(isCorrect);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.error(ErrorCode.ERROR, e.getMessage(), null);
+        }
+    }
+
     private void onSignBitcoinTransaction(MethodCall call, Result result) {
         try {
-            if (isArgumentLegal(call, result)) {
+            if (isArgumentIllegal(call, result)) {
                 return;
             }
             Object arguments = call.arguments;
@@ -103,7 +131,7 @@ public class TokenCorePlugin implements MethodCallHandler {
             result.success(signResult);
         } catch (Exception e) {
             e.printStackTrace();
-            result.error(ErrorCode.SIGN_ERROR,e.getMessage(),null);
+            result.error(ErrorCode.SIGN_ERROR, e.getMessage(), null);
 
         }
     }
@@ -111,12 +139,12 @@ public class TokenCorePlugin implements MethodCallHandler {
 
     private void onImportPrivateKey(MethodCall call, Result result) {
         try {
-            if (isArgumentLegal(call, result)) {
+            if (isArgumentIllegal(call, result)) {
                 return;
             }
             Object arguments = call.arguments;
             String json = objectMapper.writeValueAsString(arguments);
-            ImportPrivateKeyArgs args = objectMapper.readValue(json,ImportPrivateKeyArgs.class);
+            ImportPrivateKeyArgs args = objectMapper.readValue(json, ImportPrivateKeyArgs.class);
 
             if (isArgumentValid(args, call, result)) {
                 return;
@@ -139,37 +167,37 @@ public class TokenCorePlugin implements MethodCallHandler {
             result.success(s);
         } catch (Exception e) {
             e.printStackTrace();
-            result.error(ErrorCode.IMPORT_ERROR,e.getMessage(),null);
+            result.error(ErrorCode.IMPORT_ERROR, e.getMessage(), null);
         }
 
     }
 
     private void onExportPrivateKey(MethodCall call, Result result) {
         try {
-            if (isArgumentLegal(call, result)) {
+            if (isArgumentIllegal(call, result)) {
                 return;
             }
             Object arguments = call.arguments;
             String json = objectMapper.writeValueAsString(arguments);
-            ExportArgs args = objectMapper.readValue(json,ExportArgs.class);
+            ExportArgs args = objectMapper.readValue(json, ExportArgs.class);
 
             ExWallet wallet = mapKeystore2Wallet(args.keystore, args.password);
             String privateKey = wallet.exportPrivateKey(args.password);
             result.success(privateKey);
         } catch (Exception e) {
             e.printStackTrace();
-            result.error(ErrorCode.EXPORT_ERROR, "export error , "+e.getMessage(), null);
+            result.error(ErrorCode.EXPORT_ERROR, "export error , " + e.getMessage(), null);
         }
     }
 
     private void onExportMnemonic(MethodCall call, Result result) {
         try {
-            if (isArgumentLegal(call, result)) {
+            if (isArgumentIllegal(call, result)) {
                 return;
             }
             Object arguments = call.arguments;
             String json = objectMapper.writeValueAsString(arguments);
-            ExportArgs args = objectMapper.readValue(json,ExportArgs.class);
+            ExportArgs args = objectMapper.readValue(json, ExportArgs.class);
 
             ObjectMapper mapper = new ObjectMapper();
             ExIdentityKeystore keystore;
@@ -190,12 +218,12 @@ public class TokenCorePlugin implements MethodCallHandler {
 
     private void onRecoverIdentity(MethodCall call, Result result) {
         try {
-            if (isArgumentLegal(call, result)) {
+            if (isArgumentIllegal(call, result)) {
                 return;
             }
             Object arguments = call.arguments;
             String json = objectMapper.writeValueAsString(arguments);
-            RecoverIdentityArgs args = objectMapper.readValue(json,RecoverIdentityArgs.class);
+            RecoverIdentityArgs args = objectMapper.readValue(json, RecoverIdentityArgs.class);
             if (isArgumentValid(args, call, result)) {
                 return;
             }
@@ -203,14 +231,14 @@ public class TokenCorePlugin implements MethodCallHandler {
             handleRawIdentity(result, rawIdentity);
         } catch (Exception e) {
             e.printStackTrace();
-            result.error(ErrorCode.IMPORT_ERROR,e.getMessage(),null);
+            result.error(ErrorCode.IMPORT_ERROR, e.getMessage(), null);
         }
     }
 
 
     @SuppressWarnings({"unused", "unchecked"})
     private void onRandomMnemonic(MethodCall call, Result result) {
-        if (isArgumentLegal(call, result)) {
+        if (isArgumentIllegal(call, result)) {
             return;
         }
         Map<String, Object> map = (Map<String, Object>) call.arguments;
@@ -223,12 +251,12 @@ public class TokenCorePlugin implements MethodCallHandler {
 
     private void onCreateIdentity(MethodCall call, Result result) {
         try {
-            if (isArgumentLegal(call, result)) {
+            if (isArgumentIllegal(call, result)) {
                 return;
             }
             Object arguments = call.arguments;
             String json = objectMapper.writeValueAsString(arguments);
-            CreateIdentityArgs args = objectMapper.readValue(json,CreateIdentityArgs.class);
+            CreateIdentityArgs args = objectMapper.readValue(json, CreateIdentityArgs.class);
             if (isArgumentValid(args, call, result)) {
                 return;
             }
@@ -236,7 +264,7 @@ public class TokenCorePlugin implements MethodCallHandler {
             handleRawIdentity(result, rawIdentity);
         } catch (Exception e) {
             e.printStackTrace();
-            result.error(ErrorCode.ERROR,e.getMessage(),null);
+            result.error(ErrorCode.ERROR, e.getMessage(), null);
         }
     }
 
@@ -254,18 +282,17 @@ public class TokenCorePlugin implements MethodCallHandler {
             }
 
             FlutterExMetadata metadata = new FlutterExMetadata(rawIdentity.getMetadata());
-            FlutterExIdentity flutterExIdentity = new FlutterExIdentity(keystore, wallets,metadata);
+            FlutterExIdentity flutterExIdentity = new FlutterExIdentity(keystore, wallets, metadata);
             String s = objectMapper.writeValueAsString(flutterExIdentity);
             result.success((s));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            result.error(ErrorCode.ERROR,e.getMessage(),null);
+            result.error(ErrorCode.ERROR, e.getMessage(), null);
         }
     }
 
 
-
-    private ExWallet mapKeystore2Wallet(String keystoreJson,String password) throws Exception{
+    private ExWallet mapKeystore2Wallet(String keystoreJson, String password) throws Exception {
         if (KeystoreUtil.isIdentityKeystore(keystoreJson)) {
             throw new IllegalArgumentException("do not allow export identity keystore 2 private key");
         }
@@ -278,14 +305,14 @@ public class TokenCorePlugin implements MethodCallHandler {
             V3Keystore keystore = objectMapper.readValue(keystoreJson, V3Keystore.class);
             wallet = new ExWallet(keystore);
         }
-        if (wallet == null){
+        if (wallet == null) {
             throw new IllegalArgumentException("unrecognized keystore content");
         }
         return wallet;
     }
 
 
-    private boolean isArgumentLegal(MethodCall call, Result result) {
+    private boolean isArgumentIllegal(MethodCall call, Result result) {
         if (!(call.arguments instanceof Map)) {
             result.error(ErrorCode.ARGS_ERROR, String.format("arguments in %s method type error.need map", call.method), null);
             return true;

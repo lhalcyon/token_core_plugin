@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:token_core_plugin/model/ex_identity.dart';
 import 'package:token_core_plugin/model/ex_wallet.dart';
@@ -8,7 +6,6 @@ import 'package:token_core_plugin_example/item.dart';
 import 'package:flutter/services.dart';
 
 class IdentityDemo extends StatelessWidget {
-
   final List<Item> listData = List();
 
   void initList() {
@@ -17,6 +14,7 @@ class IdentityDemo extends StatelessWidget {
     listData.add(Item('create identity test'));
     listData.add(Item('recover identity test'));
     listData.add(Item('export mnemonic test'));
+    listData.add(Item('verify password test'));
   }
 
   Future onItemTapped(int index) async {
@@ -60,8 +58,25 @@ class IdentityDemo extends StatelessWidget {
               "reward left manage decorate joke milk tomorrow spoil wrist regular disease correct");
           var keystore = identity.keystore;
           var mnemonic =
-          await TokenCorePlugin.exportMnemonic(keystore, password);
+              await TokenCorePlugin.exportMnemonic(keystore, password);
           print(mnemonic);
+        } on PlatformException catch (e) {
+          print(e.toString());
+        }
+        break;
+      case 4:
+        try {
+          ExIdentity identity = await TokenCorePlugin.recoverIdentity(
+              password,
+              Network.testNet,
+              SegWit.none,
+              "reward left manage decorate joke milk tomorrow spoil wrist regular disease correct");
+          var keystore = identity.keystore;
+          var isCorrect = TokenCorePlugin.verifyPassword(keystore, password);
+          print("isCorrect:$isCorrect");
+          isCorrect.then((b){
+            print('then:$b');
+          });
         } on PlatformException catch (e) {
           print(e.toString());
         }
@@ -71,19 +86,21 @@ class IdentityDemo extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     initList();
-    return new ListView.builder(itemCount:listData.length,itemBuilder: (BuildContext context, int index){
-      var data = listData[index];
-      return new ListTile(title: new Text(data.title),onTap: ()  {
-        print('--------------- '+data.title +'start ---------------');
-        onItemTapped(index);
-        print('end');
-      },);
-    });
+    return new ListView.builder(
+        itemCount: listData.length,
+        itemBuilder: (BuildContext context, int index) {
+          var data = listData[index];
+          return new ListTile(
+            title: new Text(data.title),
+            onTap: () {
+              print('--------------- ' + data.title + 'start ---------------');
+              onItemTapped(index);
+              print('--------------- ' + 'end' + 'start ---------------');
+            },
+          );
+        });
   }
-
-
 }
