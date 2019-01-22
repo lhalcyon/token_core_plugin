@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:token_core_plugin/model/ex_wallet.dart';
 
 class ExIdentity {
@@ -43,7 +45,23 @@ class ExIdentity {
     }
   }
 
-  Map<String, dynamic> toMap() => {
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is ExIdentity &&
+              runtimeType == other.runtimeType;
+
+  @override
+  int get hashCode {
+    var json = jsonDecode(this.keystore);
+    var identifier = json['identifier'];
+    return identifier == null ? 0 : identifier.hashCode;
+  }
+
+
+  Map<String, dynamic> toMap() =>
+      {
         'keystore': keystore,
         'wallets': wallets,
       };
