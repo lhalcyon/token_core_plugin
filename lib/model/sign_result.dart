@@ -1,6 +1,4 @@
-
 class SignResult {
-
   String signedTx;
 
   String txHash;
@@ -10,13 +8,10 @@ class SignResult {
   SignResult({this.signedTx, this.txHash, this.wtxID});
 
   SignResult.fromMap(Map<String, dynamic> map)
-      :
-        signedTx = map['signedTx'],
-        txHash = map['txHash']
-  ;
+      : signedTx = map['signedTx'],
+        txHash = map['txHash'];
 
-  Map<String, dynamic> toMap() =>
-      {
+  Map<String, dynamic> toMap() => {
         'signedTx': signedTx,
         'txHash': txHash,
         'wtxID': wtxID,
@@ -26,6 +21,4 @@ class SignResult {
   String toString() {
     return 'SignResult{signedTx: $signedTx, txHash: $txHash, wtxID: $wtxID}';
   }
-
-
 }

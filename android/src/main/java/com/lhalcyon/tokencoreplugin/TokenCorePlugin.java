@@ -102,7 +102,7 @@ public class TokenCorePlugin implements MethodCallHandler {
             String json = objectMapper.writeValueAsString(arguments);
             VerifyArgs args = objectMapper.readValue(json, VerifyArgs.class);
             boolean isCorrect = false;
-            if (KeystoreUtil.isIdentityKeystore(args.keystore)) {
+            if (KeystoreUtil.isIdentityKeystore(objectMapper,args.keystore)) {
                 ExIdentityKeystore identityKeystore = objectMapper.readValue(args.keystore, ExIdentityKeystore.class);
                 isCorrect = identityKeystore.verifyPassword(args.password);
             } else {
@@ -291,17 +291,16 @@ public class TokenCorePlugin implements MethodCallHandler {
         }
     }
 
-
     private ExWallet mapKeystore2Wallet(String keystoreJson, String password) throws Exception {
-        if (KeystoreUtil.isIdentityKeystore(keystoreJson)) {
+        if (KeystoreUtil.isIdentityKeystore(objectMapper,keystoreJson)) {
             throw new IllegalArgumentException("do not allow export identity keystore 2 private key");
         }
         ExWallet wallet = null;
-        if (KeystoreUtil.isHDMnemonicKeystore(keystoreJson)) {
+        if (KeystoreUtil.isHDMnemonicKeystore(objectMapper,keystoreJson)) {
             ExHDMnemonicKeystore keystore = objectMapper.readValue(keystoreJson, ExHDMnemonicKeystore.class);
             wallet = new ExWallet(keystore);
         }
-        if (KeystoreUtil.isV3Keystore(keystoreJson)) {
+        if (KeystoreUtil.isV3Keystore(objectMapper,keystoreJson)) {
             V3Keystore keystore = objectMapper.readValue(keystoreJson, V3Keystore.class);
             wallet = new ExWallet(keystore);
         }

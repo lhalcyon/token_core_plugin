@@ -12,9 +12,9 @@ public class RecoverIdentityArgs implements ArgsValid{
 
     public String password;
 
-    public int network;
+    public String network;
 
-    public int segwit;
+    public String segwit;
 
     public String mnemonic;
 
@@ -32,10 +32,9 @@ public class RecoverIdentityArgs implements ArgsValid{
             String[] split = mnemonic.split(" ");
             List<String> mnemonic = Arrays.asList(split);
             MnemonicUtil.validateMnemonics(mnemonic);
-            return password != null &&
-                    Network.valueOf(network) != null &&
-                    SegWit.valueOf(segwit) != null
-                    ;
+            Network.valueOf(network);
+            SegWit.valueOf(segwit);
+            return password != null;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

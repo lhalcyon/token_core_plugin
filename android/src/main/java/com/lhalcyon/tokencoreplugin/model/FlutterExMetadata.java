@@ -9,13 +9,13 @@ import com.lhalcyon.tokencore.wallet.ex.WalletType;
 
 public class FlutterExMetadata {
 
-    public int walletFrom;
+    public String walletFrom;
 
-    public int network;
+    public String network;
 
-    public int segWit;
+    public String segWit;
 
-    public int walletType;
+    public String walletType;
 
     public String chainType;
 

@@ -8,6 +8,7 @@ public class ExportArgs implements ArgsValid {
 
     @Override
     public boolean isValid() {
-        return true;
+        // not check keystore for now , cuz we can check it while parsing it to Keystore class
+        return null != password;
     }
 }

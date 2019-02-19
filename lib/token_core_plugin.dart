@@ -11,7 +11,7 @@ class TokenCorePlugin {
       const MethodChannel('realm.lhalcyon.com/token_core_plugin');
 
   static Future<ExIdentity> createIdentity(
-      String password, int network, int segwit, int words) async {
+      String password, String network, String segwit, int words) async {
     final String identityJson = await _channel.invokeMethod('createIdentity', {
       'password': password,
       'network': network,
@@ -50,7 +50,7 @@ class TokenCorePlugin {
   }
 
   static Future<ExIdentity> recoverIdentity(
-      String password, int network, int segwit, String mnemonic) async {
+      String password, String network, String segwit, String mnemonic) async {
     final String identityJson = await _channel.invokeMethod('recoverIdentity', {
       'password': password,
       'network': network,
@@ -64,7 +64,7 @@ class TokenCorePlugin {
   }
 
   static Future<ExWallet> importPrivateKey(String privateKey, String password,
-      int network, int segwit, String chainType) async {
+      String network, String segwit, String chainType) async {
     final String walletJson = await _channel.invokeMethod('importPrivateKey', {
       'privateKey': privateKey,
       'password': password,

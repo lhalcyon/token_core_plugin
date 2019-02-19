@@ -28,8 +28,7 @@ public class SignBTCArgs implements ArgsValid  {
 
     public ArrayList<UTXO> getUTXO(ObjectMapper mapper) throws Exception{
         JavaType javaType = ConvertUtil.getCollectionType(mapper,ArrayList.class, UTXO.class);
-        ArrayList<UTXO> configList =  mapper.readValue(utxo, javaType);
-        return configList;
+        return mapper.readValue(utxo, javaType);
     }
 
     @Override

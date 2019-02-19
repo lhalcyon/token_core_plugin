@@ -34,5 +34,7 @@ android {
 }
 
 dependencies {
-    api 'com.lhalcyon:tokencore:0.1.4'
+    api 'com.lhalcyon:tokencore:0.1.6'
+    testImplementation 'junit:junit:4.12'
+
 }

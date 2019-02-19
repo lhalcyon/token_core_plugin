@@ -1,33 +1,40 @@
 package com.lhalcyon.tokencoreplugin.args;
 
-import com.lhalcyon.tokencoreplugin.enums.IdentityEnums.Network;
-import com.lhalcyon.tokencoreplugin.enums.IdentityEnums.SegWit;
-import com.lhalcyon.tokencoreplugin.enums.IdentityEnums.Words;
+import com.lhalcyon.tokencore.wallet.bip.Words;
+import com.lhalcyon.tokencore.wallet.ex.Network;
+import com.lhalcyon.tokencore.wallet.ex.SegWit;
 
 public class CreateIdentityArgs implements ArgsValid{
 
     public String password;
 
-    public int network;
+    public String network;
 
-    public int segwit;
+    public String segwit;
 
     public int words;
 
     @Override
     public boolean isValid(){
-        return null != password &&
-                network == Network.testNet || network == Network.mainNet &&
-                segwit == SegWit.none || segwit == SegWit.p2wpkh &&
-                words == Words.twelve || words == Words.fifteen || words == Words.eighteen || words == Words.twentyOne || words == Words.twentyFour;
+        boolean enumValid = true;
+
+        try {
+            Network.valueOf(this.network);
+            SegWit.valueOf(segwit);
+            Words.valueOf(this.words);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            enumValid = false;
+        }
+        return null != password && enumValid ;
     }
 
-    public com.lhalcyon.tokencore.wallet.ex.Network getNetwork(){
-        return com.lhalcyon.tokencore.wallet.ex.Network.valueOf(network);
+    public Network getNetwork(){
+        return Network.valueOf(network);
     }
 
-    public com.lhalcyon.tokencore.wallet.ex.SegWit getSegwit() {
-        return com.lhalcyon.tokencore.wallet.ex.SegWit.valueOf(segwit);
+    public SegWit getSegwit() {
+        return SegWit.valueOf(segwit);
     }
 
     public com.lhalcyon.tokencore.wallet.bip.Words getWords(){
