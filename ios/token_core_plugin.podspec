@@ -11,11 +11,16 @@ A new flutter plugin project.
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
-  s.source           = { :path => '.' }
+  s.source           = {
+        :path => '.',
+        :git => 'https://github.com/lhalcyon/token-core-ios.git'
+  }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
+  s.dependency "TokenRealmCore" , "0.0.2"
 
-  s.ios.deployment_target = '8.0'
+  #s.ios.deployment_target = '8.0'
+  s.platform     = :ios, "9.0"
 end
 
