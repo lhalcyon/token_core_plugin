@@ -10,7 +10,7 @@ public class CreateIdentityArgs implements ArgsValid{
 
     public String network;
 
-    public String segwit;
+    public String segWit;
 
     public int words;
 
@@ -20,7 +20,7 @@ public class CreateIdentityArgs implements ArgsValid{
 
         try {
             Network.valueOf(this.network);
-            SegWit.valueOf(segwit);
+            SegWit.valueOf(segWit);
             Words.valueOf(this.words);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -33,8 +33,8 @@ public class CreateIdentityArgs implements ArgsValid{
         return Network.valueOf(network);
     }
 
-    public SegWit getSegwit() {
-        return SegWit.valueOf(segwit);
+    public SegWit getSegWit() {
+        return SegWit.valueOf(segWit);
     }
 
     public com.lhalcyon.tokencore.wallet.bip.Words getWords(){
@@ -46,7 +46,7 @@ public class CreateIdentityArgs implements ArgsValid{
         return "CreateIdentityArgs{" +
                 "password='" + password + '\'' +
                 ", network=" + network +
-                ", segwit=" + segwit +
+                ", segWit=" + segWit +
                 ", words=" + words +
                 '}';
     }

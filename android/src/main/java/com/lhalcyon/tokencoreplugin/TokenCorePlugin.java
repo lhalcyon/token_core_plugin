@@ -155,7 +155,7 @@ public class TokenCorePlugin implements MethodCallHandler {
             exMetadata.setFrom(isBtcImport ? WalletFrom.WIF : WalletFrom.PRIAVTE_KEY);
             exMetadata.setChainType(ChainType.valueOf(args.chainType));
             exMetadata.setNetwork(Network.valueOf(args.network));
-            exMetadata.setSegWit(SegWit.valueOf(args.segwit));
+            exMetadata.setSegWit(SegWit.valueOf(args.segWit));
             exMetadata.setWalletType(WalletType.V3);
 
             V3Keystore keystore = new V3Keystore(exMetadata, args.password, args.privateKey, "");
@@ -227,7 +227,7 @@ public class TokenCorePlugin implements MethodCallHandler {
             if (isArgumentValid(args, call, result)) {
                 return;
             }
-            ExIdentity rawIdentity = ExIdentity.recoverIdentity(args.mnemonic, args.password, args.getNetwork(), args.getSegwit());
+            ExIdentity rawIdentity = ExIdentity.recoverIdentity(args.mnemonic, args.password, args.getNetwork(), args.getSegWit());
             handleRawIdentity(result, rawIdentity);
         } catch (Exception e) {
             e.printStackTrace();
@@ -260,7 +260,7 @@ public class TokenCorePlugin implements MethodCallHandler {
             if (isArgumentValid(args, call, result)) {
                 return;
             }
-            ExIdentity rawIdentity = ExIdentity.createIdentity(args.password, args.getNetwork(), args.getSegwit(), args.getWords());
+            ExIdentity rawIdentity = ExIdentity.createIdentity(args.password, args.getNetwork(), args.getSegWit(), args.getWords());
             handleRawIdentity(result, rawIdentity);
         } catch (Exception e) {
             e.printStackTrace();
