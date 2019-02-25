@@ -15,10 +15,9 @@ class TokenCorePlugin {
     final String identityJson = await _channel.invokeMethod('createIdentity', {
       'password': password,
       'network': network,
-      'segwit': segwit,
+      'segWit': segwit,
       'words': words,
     });
-    print(identityJson);
     Map<String, dynamic> map = json.decode(identityJson);
     var identity = ExIdentity.fromMap(map);
     return identity;
@@ -54,7 +53,7 @@ class TokenCorePlugin {
     final String identityJson = await _channel.invokeMethod('recoverIdentity', {
       'password': password,
       'network': network,
-      'segwit': segwit,
+      'segWit': segwit,
       'mnemonic': mnemonic,
     });
     print('result:\n' + identityJson);
@@ -70,7 +69,7 @@ class TokenCorePlugin {
       'password': password,
       'network': network,
       'chainType': chainType,
-      'segwit': segwit
+      'segWit': segwit
     });
     Map<String, dynamic> map = json.decode(walletJson);
     var wallet = ExWallet.fromMap(map);

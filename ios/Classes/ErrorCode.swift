@@ -14,6 +14,6 @@ enum ErrorCode:String {
 
     case mnemonicError = "10002"
 
-    case signError = ""
+    case signError = "10003"
 
 }

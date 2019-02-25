@@ -50,26 +50,22 @@ class WalletFrom {
 
 class ExMetadata {
 
-  String walletFrom;
+  String from;
 
   String network;
 
   String segWit;
 
-  String walletType;
-
   String chainType;
 
   ExMetadata.fromMap(Map<String, dynamic> map)
-      : walletFrom = map['walletFrom'],
-        walletType = map['walletType'],
+      : from = map['from'],
         network = map['network'],
         segWit = map['segWit'],
         chainType = map['chainType'];
 
   Map<String, dynamic> toMap() => {
-        'walletFrom': walletFrom,
-        'walletType': walletType,
+        'walletFrom': from,
         'network': network,
         'segWit': segWit,
         'chainType': chainType
@@ -77,7 +73,7 @@ class ExMetadata {
 
   @override
   String toString() {
-    return 'ExMetadata{walletFrom: $walletFrom, network: $network, segWit: $segWit, walletType: $walletType, chainType: $chainType}';
+    return 'ExMetadata{walletFrom: $from, network: $network, segWit: $segWit, chainType: $chainType}';
   }
 }
 
