@@ -56,7 +56,6 @@ class TokenCorePlugin {
       'segWit': segwit,
       'mnemonic': mnemonic,
     });
-    print('result:\n' + identityJson);
     Map<String, dynamic> map = json.decode(identityJson);
     var identity = ExIdentity.fromMap(map);
     return identity;
@@ -74,14 +73,37 @@ class TokenCorePlugin {
     Map<String, dynamic> map = json.decode(walletJson);
     var wallet = ExWallet.fromMap(map);
 
-//    var metadataMap = map['metadata'];
-//    var metadata = ExMetadata.fromMap(metadataMap);
-//    wallet.metadata = metadata;
-
     return wallet;
   }
 
   static Future<SignResult> signBitcoinTransaction(
+      String toAddress,
+      int amount,
+      int fee,
+      List<UTXO> utxo,
+      ExWallet wallet,
+      int changeIndex,
+      String password) async {
+    UTXOStore store = UTXOStore();
+    store.utxos = utxo;
+    String utxoListStr = jsonEncode(store.toList());
+
+    final String signResultJson =
+        await _channel.invokeMethod('signBitcoinTransaction', {
+      'toAddress': toAddress,
+      'fee': fee,
+      'utxo': utxoListStr,
+      'keystore': wallet.keystore,
+      'changeIndex': changeIndex,
+      'password': password,
+      'amount': amount
+    });
+    Map<String, dynamic> map = json.decode(signResultJson);
+    var signResult = SignResult.fromMap(map);
+    return signResult;
+  }
+
+  static Future<SignResult> signUSDTTransaction(
       String toAddress,
       int amount,
       int fee,
@@ -95,7 +117,7 @@ class TokenCorePlugin {
     String utxoListStr = jsonEncode(store.toList());
 
     final String signResultJson =
-        await _channel.invokeMethod('signBitcoinTransaction', {
+    await _channel.invokeMethod('signUSDTTransaction', {
       'toAddress': toAddress,
       'fee': fee,
       'utxo': utxoListStr,

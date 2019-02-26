@@ -14,6 +14,14 @@ enum ErrorCode:String {
 
     case mnemonicError = "10002"
 
-    case signError = "10003"
+    case importError = "10003"
+
+    case typeError = "10004"
+
+    case exportError = "10005"
+
+    case keystoreError = "10006"
+
+    case signError = "10007"
 
 }

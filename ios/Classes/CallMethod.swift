@@ -20,5 +20,7 @@ enum CallMethod: String {
 
     case signBitcoinTransaction = "signBitcoinTransaction"
 
+    case signUSDTTransaction = "signUSDTTransaction"
+
     case verifyPassword = "verifyPassword"
 }

@@ -119,7 +119,7 @@ class BTCDemo extends StatelessWidget {
                 derivedPath: "0/0")
           ];
           var signResult = await TokenCorePlugin.signBitcoinTransaction(
-              to, amount, fee, utxo, bitcoinWallet, 0, password, null);
+              to, amount, fee, utxo, bitcoinWallet, 0, password);
           print(signResult);
         } on PlatformException catch (e) {
           print(e.toString());

@@ -19,6 +19,7 @@ class ChainType {
 }
 
 class WalletType {
+
   static const hd = "HD";
 
   static const random = "RANDOM";
