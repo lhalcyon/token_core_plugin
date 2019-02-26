@@ -17,7 +17,7 @@ public class ImportPrivateKeyArgs implements ArgsValid {
 
     public String network;
 
-    public String segwit;
+    public String segWit;
 
     public String chainType;
 
@@ -27,7 +27,7 @@ public class ImportPrivateKeyArgs implements ArgsValid {
         boolean enumValid = true;
         try {
             Network.valueOf(network);
-            SegWit.valueOf(segwit);
+            SegWit.valueOf(segWit);
             ChainType.valueOf(chainType);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

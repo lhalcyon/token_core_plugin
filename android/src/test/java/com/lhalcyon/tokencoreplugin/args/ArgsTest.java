@@ -23,7 +23,7 @@ public class ArgsTest {
         args.chainType = ChainType.BITCOIN.getValue();
         args.network = Network.TESTNET.getValue();
         args.password = "qq123456";
-        args.segwit = SegWit.NONE.getValue();
+        args.segWit = SegWit.NONE.getValue();
         args.privateKey = "cPu5FwyCfpEizTJRJwmRDzaLWQyULqmELbFDQDYgxSvquM2Z9JSd";
 
         boolean valid = args.isValid();
@@ -36,7 +36,7 @@ public class ArgsTest {
         args.chainType = ChainType.ETHEREUM.getValue();
         args.network = Network.TESTNET.getValue();
         args.password = "qq123456";
-        args.segwit = SegWit.NONE.getValue();
+        args.segWit = SegWit.NONE.getValue();
 
         args.privateKey = "cf6b11eca111f89568631a5670285fe9f50645979bed8cbafa22548dad64260";
         boolean valid = args.isValid();

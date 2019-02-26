@@ -14,7 +14,7 @@ public class RecoverIdentityArgs implements ArgsValid{
 
     public String network;
 
-    public String segwit;
+    public String segWit;
 
     public String mnemonic;
 
@@ -22,8 +22,8 @@ public class RecoverIdentityArgs implements ArgsValid{
         return com.lhalcyon.tokencore.wallet.ex.Network.valueOf(network);
     }
 
-    public com.lhalcyon.tokencore.wallet.ex.SegWit getSegwit() {
-        return com.lhalcyon.tokencore.wallet.ex.SegWit.valueOf(segwit);
+    public com.lhalcyon.tokencore.wallet.ex.SegWit getSegWit() {
+        return com.lhalcyon.tokencore.wallet.ex.SegWit.valueOf(segWit);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class RecoverIdentityArgs implements ArgsValid{
             List<String> mnemonic = Arrays.asList(split);
             MnemonicUtil.validateMnemonics(mnemonic);
             Network.valueOf(network);
-            SegWit.valueOf(segwit);
+            SegWit.valueOf(segWit);
             return password != null;
         } catch (Exception e) {
             e.printStackTrace();
