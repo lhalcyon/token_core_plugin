@@ -90,6 +90,7 @@ class BTCDemo extends StatelessWidget {
         break;
       case 5:
         try {
+          print("transaction test");
           var amount = 9000;
           var fee = 7000;
           ExIdentity identity = await TokenCorePlugin.recoverIdentity(

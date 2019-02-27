@@ -87,10 +87,16 @@ public class TokenCorePlugin implements MethodCallHandler {
             case CallMethod.verifyPassword:
                 onVerifyPassword(call, result);
                 break;
+            case CallMethod.signUSDTTransaction:
+                onSignUSDTTransaction(call,result);
             default:
                 result.notImplemented();
                 break;
         }
+    }
+
+    private void onSignUSDTTransaction(MethodCall call, Result result) {
+        onSignBitcoinTransaction(call,result);
     }
 
     private void onVerifyPassword(MethodCall call, Result result) {

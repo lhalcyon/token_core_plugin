@@ -16,7 +16,7 @@ enum ErrorCode:String {
 
     case importError = "10003"
 
-    case typeError = "10004"
+    case illegalOperation = "10004"
 
     case exportError = "10005"
 

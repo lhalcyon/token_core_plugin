@@ -88,6 +88,7 @@ class TokenCorePlugin {
     store.utxos = utxo;
     String utxoListStr = jsonEncode(store.toList());
 
+    print("$utxoListStr");
     final String signResultJson =
         await _channel.invokeMethod('signBitcoinTransaction', {
       'toAddress': toAddress,

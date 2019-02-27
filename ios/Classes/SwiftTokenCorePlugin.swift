@@ -35,15 +35,47 @@ public class SwiftTokenCorePlugin: NSObject, FlutterPlugin {
     }
 
     private func onSignUSDTTransaction(_ call: FlutterMethodCall, result: (Any?) -> Void) {
-        guard let arguments = isArgumentIllegal(call, result: result) else {
-            return
-        }
-
+        onSignBitcoinTransaction(call, result: result)
     }
 
     private func onSignBitcoinTransaction(_ call: FlutterMethodCall, result: (Any?) -> Void) {
         guard let arguments = isArgumentIllegal(call, result: result) else {
             return
+        }
+
+        do {
+            let to = arguments["toAddress"] as! String
+            let fee = arguments["fee"] as! Int64
+            let utxosStr = arguments["utxo"] as! String
+            let keystore = arguments["keystore"] as! String
+            let changeIndex = arguments["changeIndex"] as! Int
+            let amount = arguments["amount"] as! Int64
+            let password = arguments["password"] as! String
+            let usdtHex = arguments["usdtHex"] as? String
+
+            let mapResult = try mapKeystoreString2Object(json: nil, keystoreString: keystore)
+
+            guard let wallet = mapResult.1 else {
+                result(FlutterError.init(code: ErrorCode.illegalOperation.rawValue, message: "not a wallet keystore", details: nil))
+                return
+            }
+
+            let jsonData:Data = utxosStr.data(using: .utf8)!
+            let utxo = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as! Array<Dictionary<String,Any>>
+            print("\(utxo)")
+            let transaction:TransactionSignedResult = try WalletManager.btcSignTransaction(wallet: wallet, to: to, amount: amount, fee: fee, password: password, outputs: utxo, changeIdx: changeIndex,usdtHex: usdtHex)
+
+            let transactionJSONObject = [
+                "signedTx": transaction.signedTx,
+                "txHash": transaction.txHash,
+                "wtxID": transaction.wtxID
+            ]
+
+            let data = try! JSONSerialization.data(withJSONObject: transactionJSONObject, options: [])
+            let transactionJSONString = String(data: data, encoding: .utf8)
+            result(transactionJSONString)
+        } catch {
+            result(FlutterError(code: ErrorCode.signError.rawValue, message: "\(error)", details: nil))
         }
 
     }
@@ -53,17 +85,17 @@ public class SwiftTokenCorePlugin: NSObject, FlutterPlugin {
             return
         }
         do {
-            let keystore = arguments["keystore"]
-            let password = arguments["password"]
-            let mapResult = mapKeystoreString2Object(json: nil, keystoreString: keystore)
+            let keystore = arguments["keystore"] as! String
+            let password = arguments["password"] as! String
+            let mapResult = try mapKeystoreString2Object(json: nil, keystoreString: keystore)
 
             if let wallet = mapResult.1 {
-                let privateKey: String = wallet.privateKey(password: password, isHDWalletExportWif: true)
+                let privateKey: String = try wallet.privateKey(password: password, isHDWalletExportWif: true)
                 result(privateKey)
             }
 
             if let _ = mapResult.0 {
-                result(FlutterError.init(code: ErrorCode.typeError.rawValue, message: "Identity doesn't support export private key.", details: nil))
+                result(FlutterError.init(code: ErrorCode.illegalOperation.rawValue, message: "Identity doesn't support export private key.", details: nil))
             }
         } catch {
             result(FlutterError(code: ErrorCode.exportError.rawValue, message: "\(error)", details: nil))
@@ -75,7 +107,18 @@ public class SwiftTokenCorePlugin: NSObject, FlutterPlugin {
             return
         }
         do {
+            let privateKey = arguments["privateKey"] as! String
+            let password = arguments["password"] as! String
+            let network = Network(rawValue: arguments["network"] as! String)
+            let segWit = SegWit(rawValue: arguments["segWit"] as! String)
+            let chainType = ChainType(rawValue: arguments["chainType"] as! String)
+            let walletMeta = WalletMeta.init(chain: chainType!, from: chainType! == ChainType.btc ? WalletFrom.wif : WalletFrom.privateKey, network: network!, segwit: segWit!)
+            let wallet = try BasicWallet.importFromPrivateKey(privateKey, encryptedBy: password, metadata: walletMeta)
 
+            let flutterMetadata = FlutterMetadata.init(metadata: walletMeta)
+            let keystore: String = wallet.keystore.dump()
+            let flutterWallet = FlutterWallet.init(keystore: keystore, address: wallet.address, metadata: flutterMetadata)
+            flutterWallet.toJSON()
         } catch {
 
         }
@@ -92,7 +135,7 @@ public class SwiftTokenCorePlugin: NSObject, FlutterPlugin {
             let jsonData: Data? = keystore.data(using: .utf8)
             let json = try JSONSerialization.jsonObject(with: jsonData!) as! JSONObject
             guard let _ = json["encMnemonic"] else {
-                result(FlutterError(code: ErrorCode.typeError.rawValue, message: "The keystore does not have mnemonic.", details: nil))
+                result(FlutterError(code: ErrorCode.illegalOperation.rawValue, message: "The keystore does not have mnemonic.", details: nil))
                 return
             }
 
@@ -131,13 +174,26 @@ public class SwiftTokenCorePlugin: NSObject, FlutterPlugin {
             return
         }
         do {
-            let keystore = arguments["keystore"]
-            let password = arguments["password"]
+            let keystore = arguments["keystore"] as! String
+            let password = arguments["password"] as! String
 
+            let mapResult = try mapKeystoreString2Object(json: nil, keystoreString: keystore)
+            if let identityKeystore = mapResult.0 {
+                let verify: Bool = identityKeystore.verify(password: password)
+                result(verify)
+                return
+            }
+
+            if let wallet = mapResult.1 {
+                let verify: Bool = wallet.verifyPassword(password)
+                result(verify)
+                return
+            }
+            result(FlutterError(code: ErrorCode.keystoreError.rawValue, message: "Keystore type not match.", details: nil))
         } catch {
-
+            result(FlutterError(code: ErrorCode.keystoreError.rawValue, message: "\(error)", details: nil))    
         }
-        result(FlutterMethodNotImplemented)
+
     }
 
     private func onRecoverIdentity(_ call: FlutterMethodCall, result: FlutterResult) {
@@ -163,7 +219,7 @@ public class SwiftTokenCorePlugin: NSObject, FlutterPlugin {
 
             var flutterWallets: [FlutterWallet] = []
 
-            for wallet in rawIdentity.wallets.reversed() {
+            for wallet in rawIdentity.wallets {
                 let keystore = wallet.keystore.dump()
                 let walletMeta = FlutterMetadata.init(metadata: wallet.metadata)
                 let flutterWallet = FlutterWallet.init(keystore: keystore, address: wallet.address, metadata: walletMeta)

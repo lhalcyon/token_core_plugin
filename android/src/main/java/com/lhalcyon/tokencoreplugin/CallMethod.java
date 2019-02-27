@@ -16,6 +16,8 @@ public interface CallMethod {
 
     String signBitcoinTransaction = "signBitcoinTransaction";
 
+    String signUSDTTransaction = "signUSDTTransaction";
+
     String verifyPassword = "verifyPassword";
 
 
