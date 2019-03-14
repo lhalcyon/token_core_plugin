@@ -7,11 +7,11 @@ class SignResult {
 
   SignResult({this.signedTx, this.txHash, this.wtxID});
 
-  SignResult.fromMap(Map<String, dynamic> map)
+  SignResult.fromJson(Map<String, dynamic> map)
       : signedTx = map['signedTx'],
         txHash = map['txHash'];
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         'signedTx': signedTx,
         'txHash': txHash,
         'wtxID': wtxID,

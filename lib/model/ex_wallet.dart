@@ -59,13 +59,13 @@ class ExMetadata {
 
   String chainType;
 
-  ExMetadata.fromMap(Map<String, dynamic> map)
+  ExMetadata.fromJson(Map<String, dynamic> map)
       : from = map['from'],
         network = map['network'],
         segWit = map['segWit'],
         chainType = map['chainType'];
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         'walletFrom': from,
         'network': network,
         'segWit': segWit,
@@ -85,13 +85,13 @@ class ExWallet {
 
   String address;
 
-  ExWallet.fromMap(Map<String, dynamic> map)
+  ExWallet.fromJson(Map<String, dynamic> map)
       : keystore = map['keystore'],
         address = map['address'],
-        metadata = ExMetadata.fromMap(map['metadata']);
+        metadata = ExMetadata.fromJson(map['metadata']);
 
-  Map<String, dynamic> toMap() =>
-      {'keystore': keystore, 'address': address, 'metadata': metadata.toMap()};
+  Map<String, dynamic> toJson() =>
+      {'keystore': keystore, 'address': address, 'metadata': metadata.toJson()};
 
   @override
   String toString() {

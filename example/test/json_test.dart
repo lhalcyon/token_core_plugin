@@ -21,6 +21,6 @@ void main() {
     TestBean m = TestBean();
     m.name = "zhangsan";
     m.age = 25;
-    print(m.toMap());
+    print(m.toJson());
   });
 }

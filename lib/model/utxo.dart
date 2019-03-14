@@ -16,7 +16,7 @@ class UTXO {
   UTXO({this.txHash, this.vout, this.amount, this.address, this.scriptPubKey,
       this.derivedPath});
 
-  UTXO.fromMap(Map<String, dynamic> map)
+  UTXO.fromJson(Map<String, dynamic> map)
       :
         txHash = map['txHash'],
         vout = map['vout'],
@@ -26,7 +26,7 @@ class UTXO {
         derivedPath = map['derivedPath']
   ;
 
-  Map<String, dynamic> toMap() =>
+  Map<String, dynamic> toJson() =>
       {
         'txHash': txHash,
         'vout': vout,
@@ -49,6 +49,6 @@ class UTXOStore {
   List<UTXO> utxos;
 
   List<Map<String,dynamic>> toList() {
-    return utxos.map((u) => u.toMap()).toList();
+    return utxos.map((u) => u.toJson()).toList();
   }
 }

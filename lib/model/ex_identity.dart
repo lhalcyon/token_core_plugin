@@ -24,9 +24,9 @@ class ExIdentity {
     return null;
   }
 
-  ExIdentity.fromMap(Map<String, dynamic> map) {
+  ExIdentity.fromJson(Map<String, dynamic> map) {
     keystore = map['keystore'];
-    metadata = ExMetadata.fromMap(map['metadata']);
+    metadata = ExMetadata.fromJson(map['metadata']);
 
     var rawWallets = map['wallets'];
     if (rawWallets == null || rawWallets.length == 0) {
@@ -35,11 +35,7 @@ class ExIdentity {
     }
     for (var i = 0; i < rawWallets.length; i++) {
       var walletMap = rawWallets[i];
-      var wallet = ExWallet.fromMap(walletMap);
-
-//      var metadataMap = walletMap['metadata'];
-//      var metadata = ExMetadata.fromMap(metadataMap);
-//      wallet.metadata = metadata;
+      var wallet = ExWallet.fromJson(walletMap);
 
       wallets.add(wallet);
     }
@@ -60,7 +56,7 @@ class ExIdentity {
   }
 
 
-  Map<String, dynamic> toMap() =>
+  Map<String, dynamic> toJson() =>
       {
         'keystore': keystore,
         'wallets': wallets,

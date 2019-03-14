@@ -19,7 +19,7 @@ class TokenCorePlugin {
       'words': words,
     });
     Map<String, dynamic> map = json.decode(identityJson);
-    var identity = ExIdentity.fromMap(map);
+    var identity = ExIdentity.fromJson(map);
     return identity;
   }
 
@@ -57,7 +57,7 @@ class TokenCorePlugin {
       'mnemonic': mnemonic,
     });
     Map<String, dynamic> map = json.decode(identityJson);
-    var identity = ExIdentity.fromMap(map);
+    var identity = ExIdentity.fromJson(map);
     return identity;
   }
 
@@ -71,7 +71,7 @@ class TokenCorePlugin {
       'segWit': segwit
     });
     Map<String, dynamic> map = json.decode(walletJson);
-    var wallet = ExWallet.fromMap(map);
+    var wallet = ExWallet.fromJson(map);
 
     return wallet;
   }
@@ -100,7 +100,7 @@ class TokenCorePlugin {
       'amount': amount
     });
     Map<String, dynamic> map = json.decode(signResultJson);
-    var signResult = SignResult.fromMap(map);
+    var signResult = SignResult.fromJson(map);
     return signResult;
   }
 
@@ -129,7 +129,7 @@ class TokenCorePlugin {
       'amount': amount
     });
     Map<String, dynamic> map = json.decode(signResultJson);
-    var signResult = SignResult.fromMap(map);
+    var signResult = SignResult.fromJson(map);
     return signResult;
   }
 }

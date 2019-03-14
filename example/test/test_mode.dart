@@ -3,7 +3,7 @@ class TestBean {
 
   int age;
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
     'name': name,
     'age': age,
   };
